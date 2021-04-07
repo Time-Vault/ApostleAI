@@ -1,5 +1,7 @@
 # ApostleAI
 
+## THIS VERSION OF APOSTLEAI IS EXPLICITLY MEANT FOR THE INDEPENDENT PORTION OF THE UBCO COSC 310 ASSIGNMENT. THE BULK OF THIS CODE WAS A GROUP EFFORT, AND CREDIT BELONGS TO THE ENTIRE TEAM AT https://github.com/prophet-ai.
+
 ApostleAI is a conversation bot modeled after Paul the Apostle, commonly known as Saint Paul, an apostle who spread the teachings of Jesus in the first-century world.
 
 [![prophet-ai](https://circleci.com/gh/prophet-ai/ApostleAI/tree/automatic-unit-testing.svg?style=shield)](https://circleci.com/gh/prophet-ai/ApostleAI)
