@@ -115,11 +115,13 @@ Our team implemented a very rudimentary chat logging and saving system. At any p
 **![](https://lh3.googleusercontent.com/TywCPETfChpX_gzTwyKqUa4Wkhs9dA0O_dmgkluhGnZdHHNlzfXDp-I7wh7RUewHuiJAAC6P2OXkhE9FY3Gyu1pA9BDkk4Oh97npcJDo_bFU3I5P3rxfZYZxPrLIYp7Fsj-9qCVA)**
 
 **NEW: Ability to make Wikipedia searches through the bot**
+
 Individually I added the ability to make redemntary Wikipedia searches through the bot, returning the short description each article contains.
 
 ![Wikipedia](https://github.com/Time-Vault/ApostleAI/blob/main/public/assets/Screenshot%20(6).png)
 
 **NEW: Ability to recieve advice and philisophical quotes in different languages**
+
 By pressing the "Wisdom In Another Language" button, the bot will randomly select one of the quotes in its database, randomly select a language to translate it into, then send selections to the Bing Translate API, returning the result to the user.
 
 ![Translate](https://github.com/Time-Vault/ApostleAI/blob/main/public/assets/Screenshot%20(5).png)
