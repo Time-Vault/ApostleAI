@@ -24,10 +24,10 @@ function randBot(botId, importSocket, importedIO) {
   this.io = importedIO;
 
   // listen to message events on the socket
-  importSocket.on("randWis", (data) => {
+  importSocket.on("randWis", 
     // send message in response to new messages being recieved
-    this.sendWisdom(data);
-  });
+    this.sendWisdom(data)
+  );
 }
 
 /* If you encounter any issues with the base_url or path, make sure that you are
@@ -53,7 +53,7 @@ randBot.prototype.translateText = function (input, language){
         json: true,
     };
 
-    request(options, function(err, res, body){
+    /*request(options, function(err, res, body){
         console.log(body[0].translations[0].text);
         // create response object to be sent to the server
         let data = {
@@ -61,9 +61,10 @@ randBot.prototype.translateText = function (input, language){
             //msg: body[0].translations[0].text
             msg: "test"
           };
-        // Emit a message event on the socket to be picked up by server
-        this.socket.emit("randWis", data);
-    });
+    });*/
+
+    console.log("About to send request");
+    request(options, this.sendData());
 };
 
 // Randomly choose something to be translated and sent to the user.
@@ -93,5 +94,22 @@ randBot.prototype.sendWisdom = function(data) {
       "Even the wise must rest, try again later.";
     this.translateText(botReply, "en")
   }};
+
+  randBot.prototype.sendData = function(body){
+    //console.log(body[0].translations[0].text);
+        // create response object to be sent to the server
+        console.log("About to send.")
+        let data = {
+            sender: "bot",
+            //msg: body[0].translations[0].text
+            msg: "test"
+          };
+    // Emit a message event on the socket to be picked up by server
+    try{
+    this.socket.emit("randWisReturn", data);}
+    catch(err){
+      console.log(err);
+    }
+  }
 
   module.exports = randBot;
