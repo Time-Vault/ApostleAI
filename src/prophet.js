@@ -8,7 +8,7 @@ const porter = require("./porterStemming.js");
 
 // init the wit client using config file
 const client = new Wit({
-  accessToken: config.key,
+  accessToken: config.witKey,
 });
 
 // constructor for new bots, parameters to pass socket information
