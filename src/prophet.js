@@ -5,11 +5,18 @@ const { Wit } = require("node-wit");
 const { json } = require("express");
 const scripture = require("./scripture");
 const porter = require("./porterStemming.js");
+const request = require('request');
+const uuidv4 = require('uuid/v4');
 
 // init the wit client using config file
 const client = new Wit({
   accessToken: config.witKey,
 });
+
+var subscriptionKey = config.translatorKey;
+var endpoint = 'https://api.cognitive.microsofttranslator.com/';
+var region = 'global';
+var randomWisdom = "In all my wisdom, I unfortunately could not reach the Bing Translate Servers. Try again later.";
 
 // constructor for new bots, parameters to pass socket information
 function Bot(botId, importSocket, importedIO) {
@@ -25,8 +32,12 @@ function Bot(botId, importSocket, importedIO) {
 
   // listen to message events on the socket
   importSocket.on("message", (data) => {
+    if(data.randWis == false){
     // send message in response to new messages being recieved
-    this.sendMessage(data);
+    this.sendMessage(data);}
+    else{
+      this.sendWisdom();
+    }
   });
 }
 
@@ -45,6 +56,7 @@ Bot.prototype.sendMessage = function (msg) {
         let response = {
           sender: this.id,
           msg: this.pickReply(data, scripture.responses),
+          randWis: false,
         };
 
         // temporary console return data with information about the bots response
@@ -133,5 +145,80 @@ Bot.prototype.pickReply = function (input, responses) {
     "I understand what you're saying, but my overlords have not blessed me with the knowledge to respond...";
   return botReply;
 };
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// TRANSLATOR /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/* If you encounter any issues with the base_url or path, make sure that you are
+using the latest endpoint: https://docs.microsoft.com/azure/cognitive-services/translator/reference/v3-0-translate */
+Bot.prototype.translateText = function(input, language){
+  console.log("Setting Options");
+    let options = {
+        method: 'POST',
+        baseUrl: endpoint,
+        url: 'translate',
+        qs: {
+          'api-version': '3.0',
+          'to': language
+        },
+        headers: {
+          'Ocp-Apim-Subscription-Key': subscriptionKey,
+          'Ocp-Apim-Subscription-Region': region,
+          'Content-type': 'application/json',
+          'X-ClientTraceId': uuidv4().toString()
+        },
+        body: [{
+              'text': input
+        }],
+        json: true,
+    };
+
+    console.log("About to send request");
+    request(options, function(err, res, body){
+        console.log(body[0].translations[0].text);
+        // create response object to be sent to the server
+        randomWisdom = body[0].translations[0].text;
+    });
+
+    setTimeout(() =>{
+      let data = {
+      sender: "bot",
+      msg: randomWisdom,
+      randWis: false,
+    };
+
+    this.socket.emit("message", data);},1000);
+    randomWisdom = "In all my wisdom, I unfortunately could not reach the Bing Translate Servers. Try again later.";
+};
+
+// Randomly choose something to be translated and sent to the user.
+ Bot.prototype.sendWisdom = function() {
+    var botReply;
+    var intents = ["askingAdvice","philosophy", "wantMotivation"];
+    // Select a random category
+    let chosenIntent = intents[Math.floor(Math.random() * intents.length)]
+    console.log("I chose: " + chosenIntent);
+
+    var languages = ["de","it", "af","ar","zh-Hans", "el","fr","tlh-Latn", "ko","ga", "ja", "vi", "tr", "hi", "ru"];
+    // Select a random language
+    let chosenLanguage = languages[Math.floor(Math.random() * languages.length)]
+    console.log("I chose: " + chosenLanguage);
+
+    try{
+          botReply =
+          scripture.responses[chosenIntent]["neutral"][
+            Math.floor(Math.random() * scripture.responses[chosenIntent]["neutral"].length)
+          ];
+
+    console.log("Sending Choices");
+        this.translateText(botReply, chosenLanguage);
+    }catch(err){
+      console.log("Could not select reply.");
+    //Message if intent is not available in scripture
+    botReply =
+      "Even the wise must rest, try again later.";
+    this.translateText(botReply, "en")
+  }};
 
 module.exports = Bot;
