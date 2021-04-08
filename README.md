@@ -116,11 +116,13 @@ Our team implemented a very rudimentary chat logging and saving system. At any p
 
 **NEW: Ability to make Wikipedia searches through the bot**
 Individually I added the ability to make redemntary Wikipedia searches through the bot, returning the short description each article contains.
-![](https://photos.app.goo.gl/MxgBrnSKxg8MACsf9)
+
+![Wikipedia](https://photos.app.goo.gl/MxgBrnSKxg8MACsf9)
 
 **NEW: Ability to recieve advice and philisophical quotes in different languages**
 By pressing the "Wisdom In Another Language" button, the bot will randomly select one of the quotes in its database, randomly select a language to translate it into, then send selections to the Bing Translate API, returning the result to the user.
-![](https://photos.app.goo.gl/JnyGryMagAE6NEgz6)
+
+![Translate](https://photos.app.goo.gl/JnyGryMagAE6NEgz6)
 
 ---
 ![alt text](https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/The_Predication_of_Saint_Paul_LACMA_M.2000.179.24.jpg/800px-The_Predication_of_Saint_Paul_LACMA_M.2000.179.24.jpg)
