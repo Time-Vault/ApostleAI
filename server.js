@@ -57,6 +57,15 @@ io.on('connection', (socket) => {
         io.emit('randWis', data);
     });
 
+    socket.on('randWisReturn', (data) => {
+        // log the message information
+        // note, messages come in json form data = { sender, msg }
+        console.log(logger.getTime() + logger.info("message: ") + data.msg + ' | from randomWisdomBot');
+
+        // emit a message event to to front end to recieve
+        io.emit('randWisReturn', data);
+    });
+
     // socket listener for disconnections, splice old sockets from the stack
     socket.on('disconnect', (socket) => {
         // splice old connections
