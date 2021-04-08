@@ -52,11 +52,21 @@
         <a id="saveChat" href="#" download="chatLog.txt">
           <button>Save Chat Log</button>
         </a>
+        <input
+          id="wikiInput"
+          type="text"
+          name="wikiInput"
+          placeholder="Search Wikipedia for deeper learning!"
+          autocomplete="off"
+          autofocus="true"
+        />
+        <button id="wikiButton" type="submit">Wikipedia Search</button>
       </div>
     </div>
 
     <!-- importing porterStemming and chat log this way lets us use the functions within our inputs -->
     <script src="/js/saveChat.js"></script>
+    <script src="/js/wikipediaSearch.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script>
       // main script body
@@ -66,6 +76,8 @@
       // Jquery identifiers for dom objects
       var sendChat = $("#chatButton")[0];
       var input = $("#message")[0];
+      var sendSearch = $("#wikiButton")[0];
+      var wikiInput = $("#wikiInput")[0];
       var messages = $("#messages")[0];
 
       // user input
@@ -81,6 +93,11 @@
             socket.emit("message", data);
             input.value = "";
           }
+          // Enter keypress for Wikipedia
+          else if (wikiInput.value) {
+            wikiFunnel(wikiInput.value)
+            wikiInput.value = "";
+          }
         }
       });
 
@@ -95,6 +112,26 @@
           input.value = "";
         }
       };
+
+      //Begin use of Wikipedia
+      sendSearch.onclick = function () {
+        if (wikiInput.value) {
+          wikiFunnel(wikiInput.value);
+          wikiInput.value = "";
+        }
+      };
+
+      async function wikiFunnel(wikiSearch){
+        wikiSearch = await searchInput(wikiSearch);
+
+        let data = {
+            sender: "bot",
+            msg: wikiSearch,
+          };
+
+          displayMessage(data);
+          saveChatLog(data.sender + ": " + data.msg);
+      }
 
       // display messages
       socket.on("message", function (data) {
