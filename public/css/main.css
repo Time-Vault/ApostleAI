@@ -96,7 +96,7 @@ body {
   font-family: "Oswald", sans-serif;
   font-size: 75px;
 }
-
+/*
 .title:before {
   content: "APOSTLE";
   color: white;
@@ -106,7 +106,7 @@ body {
 .title:after {
   content: "AI";
   color: #c0392b;
-}
+}*/
 
 .messageContainer {
   bottom: 20px;
@@ -115,7 +115,7 @@ body {
 }
 
 .chat {
-  height: 350px;
+  height: 500px;
   width: 50vw;
   display: flex;
   flex-direction: column;
