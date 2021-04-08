@@ -90,6 +90,7 @@
             let data = {
               sender: "user",
               msg: input.value,
+              randWis: false,
             };
 
             socket.emit("message", data);
@@ -108,11 +109,23 @@
           let data = {
             sender: "user",
             msg: input.value,
+            randWis: false,
           };
 
           socket.emit("message", data);
           input.value = "";
         }
+      };
+
+      // Random Message of Wisdom
+      randWisdom.onclick = function () {
+        console.log("random wisdom");
+        let data = {
+            sender: "bot",
+            msg: "Select Random Wisdom",
+            randWis: true,
+          };
+        socket.emit("message", data);
       };
 
       //Begin use of Wikipedia
@@ -129,33 +142,22 @@
         let data = {
             sender: "bot",
             msg: wikiSearch,
+            randWis: false,
           };
 
           displayMessage(data);
           saveChatLog(data.sender + ": " + data.msg);
       }
 
-      // Random Message of Wisdom
-      randWisdom.onclick = function () {
-        console.log("random wisdom");
-        let data = {
-            sender: "bot",
-            msg: "nulltre",
-          };
-        socket.emit("randWis", data);
-      };
-
       // display messages
       socket.on("message", function (data) {
+        if (data.randWis == true){
+          //Ignore
+        }
+        else{
         displayMessage(data);
         saveChatLog(data.sender + ": " + data.msg);
-      });
-      // display random wisdom
-      socket.on("randWisReturn", function (data) {
-        console.log("Random Wisdom 2");
-        console.log(data.msg);
-        displayMessage(data);
-        saveChatLog(data.sender + ": " + data.msg);
+      }
       });
 
       function displayMessage(data) {
