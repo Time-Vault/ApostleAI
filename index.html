@@ -151,7 +151,7 @@
         saveChatLog(data.sender + ": " + data.msg);
       });
       // display random wisdom
-      socket.on("randWis", function (data) {
+      socket.on("randWisReturn", function (data) {
         console.log("Random Wisdom 2");
         console.log(data.msg);
         displayMessage(data);
