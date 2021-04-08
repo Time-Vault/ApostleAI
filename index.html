@@ -52,6 +52,7 @@
         <a id="saveChat" href="#" download="chatLog.txt">
           <button>Save Chat Log</button>
         </a>
+        <button id="randWisdom">Wisdom In Another Language</button>
         <input
           id="wikiInput"
           type="text"
@@ -79,6 +80,7 @@
       var sendSearch = $("#wikiButton")[0];
       var wikiInput = $("#wikiInput")[0];
       var messages = $("#messages")[0];
+      var randWisdom = $("#randWisdom")[0];
 
       // user input
 
@@ -133,8 +135,25 @@
           saveChatLog(data.sender + ": " + data.msg);
       }
 
+      // Random Message of Wisdom
+      randWisdom.onclick = function () {
+        console.log("random wisdom");
+        let data = {
+            sender: "bot",
+            msg: "nulltre",
+          };
+        socket.emit("randWis", data);
+      };
+
       // display messages
       socket.on("message", function (data) {
+        displayMessage(data);
+        saveChatLog(data.sender + ": " + data.msg);
+      });
+      // display random wisdom
+      socket.on("randWis", function (data) {
+        console.log("Random Wisdom 2");
+        console.log(data.msg);
         displayMessage(data);
         saveChatLog(data.sender + ": " + data.msg);
       });
@@ -161,6 +180,26 @@
           messageDiv.appendChild(messageImg);
           messageDiv.appendChild(messageText);
         }
+
+        messages.appendChild(messageDiv);
+        messages.scrollTop = messages.scrollHeight - messages.clientHeight;
+      }
+
+      function displayRandomMessage(data) {
+        /*  note that the message stream that comes through is
+            a json object with sender and msg attributes */
+
+        let messageDiv = document.createElement("div");
+
+        let messageImg = document.createElement("img");
+        let messageText = document.createElement("span");
+        messageDiv.id = "bot";
+        messageImg.src = "assets/paul.jpg";
+        messageImg.className = "avatar";
+        messageDiv.className = "bot response box sb2";
+        messageText.innerText = data;
+        messageDiv.appendChild(messageImg);
+        messageDiv.appendChild(messageText);
 
         messages.appendChild(messageDiv);
         messages.scrollTop = messages.scrollHeight - messages.clientHeight;
