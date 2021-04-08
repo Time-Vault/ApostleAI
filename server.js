@@ -5,7 +5,6 @@ const http = require('http').createServer(app);
 const io = require('socket.io')(http);
 const logger = require('./src/logger')
 const Bot = require('./src/prophet');
-const randBot = require('./src/translate');
 
 // connections array
 var connections = [];
@@ -29,7 +28,6 @@ io.on('connection', (socket) => {
     // initialize the bots while passing in the socket objects;
     // this is also where more bots could be loaded up to speak to each other
     var bot = new Bot('bot', socket, io);
-    var randbot = new randBot('bot2', socket, io);
     // push new connections to connection array
     connections.push(socket);
 
@@ -45,25 +43,6 @@ io.on('connection', (socket) => {
 
         // emit a message event to to front end to recieve
         io.emit('message', data);
-    });
-
-    // Socket listener for MESSAGE event
-    socket.on('randWis', (data) => {
-        // log the message information
-        // note, messages come in json form data = { sender, msg }
-        console.log(logger.getTime() + logger.info("message: ") + data.msg + ' | from randomWisdom');
-
-        // emit a message event to to front end to recieve
-        io.emit('randWis', data);
-    });
-
-    socket.on('randWisReturn', (data) => {
-        // log the message information
-        // note, messages come in json form data = { sender, msg }
-        console.log(logger.getTime() + logger.info("message: ") + data.msg + ' | from randomWisdomBot');
-
-        // emit a message event to to front end to recieve
-        io.emit('randWisReturn', data);
     });
 
     // socket listener for disconnections, splice old sockets from the stack
