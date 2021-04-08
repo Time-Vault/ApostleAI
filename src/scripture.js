@@ -234,7 +234,6 @@ exports.responses = {
       "Taking a break is not a bad idea. It is actually a good idea",
       "You should not be ashamed of escaping. You should be proud of yourself when you escape from the situation you are not feeling comfortable in. It is not easy.",
       "Meet someone who sees what you are now, not your past.",
-      ".",
     ],
     "negative": [
       "Don’t limit yourself. Many people limit themselves to what they think they can do. You can go as far as your mind lets you. What you believe, remember, you can achieve.",
