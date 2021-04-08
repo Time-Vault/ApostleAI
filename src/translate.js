@@ -33,6 +33,7 @@ function randBot(botId, importSocket, importedIO) {
 /* If you encounter any issues with the base_url or path, make sure that you are
 using the latest endpoint: https://docs.microsoft.com/azure/cognitive-services/translator/reference/v3-0-translate */
 randBot.prototype.translateText = function (input, language){
+  console.log("Setting Options");
     let options = {
         method: 'POST',
         baseUrl: endpoint,
@@ -85,10 +86,11 @@ randBot.prototype.sendWisdom = function(data) {
           scripture.responses[chosenIntent]["neutral"][
             Math.floor(Math.random() * scripture.responses[chosenIntent]["neutral"].length)
           ];
-  
+
+    console.log("Sending Choices");
         this.translateText(botReply, chosenLanguage);
     }catch(err){
-
+      console.log("Could not select reply.");
     //Message if intent is not available in scripture
     botReply =
       "Even the wise must rest, try again later.";
