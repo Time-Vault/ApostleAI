@@ -185,7 +185,7 @@ Bot.prototype.translateText = function(input, language, outbound){
       translatedMsg = "In all my wisdom, I unfortunately could not reach the Bing Translate Servers. Try again later.";
     }
   
-  },1000);
+  },500);
 };
 
 module.exports = Bot;
