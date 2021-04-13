@@ -16,7 +16,8 @@ const client = new Wit({
 var subscriptionKey = config.translatorKey;
 var endpoint = 'https://api.cognitive.microsofttranslator.com/';
 var region = 'global';
-var randomWisdom = "In all my wisdom, I unfortunately could not reach the Bing Translate Servers. Try again later.";
+var translatedMsg = "In all my wisdom, I unfortunately could not reach the Bing Translate Servers. Try again later.";
+var inputLang = "en";
 
 // constructor for new bots, parameters to pass socket information
 function Bot(botId, importSocket, importedIO) {
@@ -32,12 +33,9 @@ function Bot(botId, importSocket, importedIO) {
 
   // listen to message events on the socket
   importSocket.on("message", (data) => {
-    if(data.randWis == false){
     // send message in response to new messages being recieved
-    this.sendMessage(data);}
-    else{
-      this.sendWisdom();
-    }
+    //this.sendMessage(data);}
+    this.translateText(data.msg, "en", false);
   });
 }
 
@@ -52,25 +50,8 @@ Bot.prototype.sendMessage = function (msg) {
       .message(input, {})
       // on success
       .then((data) => {
-        // create response object to be sent to the server
-        let response = {
-          sender: this.id,
-          msg: this.pickReply(data, scripture.responses),
-          randWis: false,
-        };
-
-        // temporary console return data with information about the bots response
-        console.log(
-          logger.getTime() +
-            "[Bot with ID " +
-            this.id +
-            "]: sending message " +
-            logger.info(JSON.stringify(response))
-        );
-
         // Emit a message event on the socket to be picked up by server
-        // this.socket.emit("Intent: ", data.intents[0].name);
-        this.socket.emit("message", response);
+        this.translateText(this.pickReply(data, scripture.responses), inputLang, true);
       })
       // catch errors and log it to console on the error stream
       .catch(logger.error(console.error));
@@ -152,8 +133,9 @@ Bot.prototype.pickReply = function (input, responses) {
 
 /* If you encounter any issues with the base_url or path, make sure that you are
 using the latest endpoint: https://docs.microsoft.com/azure/cognitive-services/translator/reference/v3-0-translate */
-Bot.prototype.translateText = function(input, language){
-  console.log("Setting Options");
+Bot.prototype.translateText = function(input, language, outbound){
+  console.log("Message "+input);
+  console.log("To Language "+language);
     let options = {
         method: 'POST',
         baseUrl: endpoint,
@@ -174,51 +156,36 @@ Bot.prototype.translateText = function(input, language){
         json: true,
     };
 
-    console.log("About to send request");
     request(options, function(err, res, body){
-        console.log(body[0].translations[0].text);
         // create response object to be sent to the server
-        randomWisdom = body[0].translations[0].text;
+        translatedMsg = body[0].translations[0].text;
+        inputLang = body[0].detectedLanguage.language;
     });
 
     setTimeout(() =>{
+      console.log("Bing Returned Language: "+inputLang);
+
+      if(outbound){
+        console.log("Outgoing Message: "+translatedMsg);
+        let data = {
+          sender: "bot",
+          msg: translatedMsg,
+        };
+
+    this.socket.emit("message", data);
+    translatedMsg = "In all my wisdom, I unfortunately could not reach the Bing Translate Servers. Try again later.";}
+    
+
+    else{
+      console.log("Inbound Message: "+translatedMsg);
       let data = {
-      sender: "bot",
-      msg: randomWisdom,
-      randWis: false,
-    };
-
-    this.socket.emit("message", data);},1000);
-    randomWisdom = "In all my wisdom, I unfortunately could not reach the Bing Translate Servers. Try again later.";
+        sender: "bot",
+        msg: translatedMsg,}
+      this.sendMessage(data);
+      translatedMsg = "In all my wisdom, I unfortunately could not reach the Bing Translate Servers. Try again later.";
+    }
+  
+  },1000);
 };
-
-// Randomly choose something to be translated and sent to the user.
- Bot.prototype.sendWisdom = function() {
-    var botReply;
-    var intents = ["askingAdvice","philosophy", "wantMotivation"];
-    // Select a random category
-    let chosenIntent = intents[Math.floor(Math.random() * intents.length)]
-    console.log("I chose: " + chosenIntent);
-
-    var languages = ["de","it", "af","ar","zh-Hans", "el","fr","tlh-Latn", "ko","ga", "ja", "vi", "tr", "hi", "ru"];
-    // Select a random language
-    let chosenLanguage = languages[Math.floor(Math.random() * languages.length)]
-    console.log("I chose: " + chosenLanguage);
-
-    try{
-          botReply =
-          scripture.responses[chosenIntent]["neutral"][
-            Math.floor(Math.random() * scripture.responses[chosenIntent]["neutral"].length)
-          ];
-
-    console.log("Sending Choices");
-        this.translateText(botReply, chosenLanguage);
-    }catch(err){
-      console.log("Could not select reply.");
-    //Message if intent is not available in scripture
-    botReply =
-      "Even the wise must rest, try again later.";
-    this.translateText(botReply, "en")
-  }};
 
 module.exports = Bot;
