@@ -120,9 +120,9 @@ Individually I added the ability to make redemntary Wikipedia searches through t
 
 ![Wikipedia](https://github.com/Time-Vault/ApostleAI/blob/main/public/assets/Screenshot%20(6).png)
 
-**NEW: Ability to recieve advice and philisophical quotes in different languages**
+**NEW: Multilingual Support**
 
-By pressing the "Wisdom In Another Language" button, the bot will randomly select one of the quotes in its database, randomly select a language to translate it into, then send selections to the Bing Translate API, returning the result to the user.
+ApostleAI can now have a conversation in multiple languages thanks to the Microsoft Bing Translator API! Simply type in your language of choice and see!.
 
 ![Translate](https://github.com/Time-Vault/ApostleAI/blob/main/public/assets/Screenshot%20(5).png)
 
