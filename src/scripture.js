@@ -8,10 +8,7 @@ exports.responses = {
       "Hey!",
       "Hi there!",
       "Greetings, friend",
-      "Salve, my friend!",
       "Nice to see you!",
-      "Marhabaan. Greetings.",
-      "Shalom, good day.",
       "Hi, I've missed you.",
 	    "How are you?"
     ],
@@ -255,7 +252,6 @@ exports.responses = {
       "I’m not afraid of death, I just don’t want to be there when it happens.",
       "The trouble with having an open mind, of course, is that people will insist on coming along and trying to put things in it.",
       "Creativity is knowing how to hide your sources...",
-      ""
     ],
     "neutral": [
       "To exist is to live",
