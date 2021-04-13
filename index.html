@@ -52,7 +52,6 @@
         <a id="saveChat" href="#" download="chatLog.txt">
           <button>Save Chat Log</button>
         </a>
-        <button id="randWisdom">Wisdom In Another Language</button>
         <input
           id="wikiInput"
           type="text"
@@ -80,7 +79,6 @@
       var sendSearch = $("#wikiButton")[0];
       var wikiInput = $("#wikiInput")[0];
       var messages = $("#messages")[0];
-      var randWisdom = $("#randWisdom")[0];
 
       // user input
 
@@ -90,7 +88,6 @@
             let data = {
               sender: "user",
               msg: input.value,
-              randWis: false,
             };
 
             socket.emit("message", data);
@@ -109,23 +106,11 @@
           let data = {
             sender: "user",
             msg: input.value,
-            randWis: false,
           };
 
           socket.emit("message", data);
           input.value = "";
         }
-      };
-
-      // Random Message of Wisdom
-      randWisdom.onclick = function () {
-        console.log("random wisdom");
-        let data = {
-            sender: "bot",
-            msg: "Select Random Wisdom",
-            randWis: true,
-          };
-        socket.emit("message", data);
       };
 
       //Begin use of Wikipedia
@@ -142,7 +127,6 @@
         let data = {
             sender: "bot",
             msg: wikiSearch,
-            randWis: false,
           };
 
           displayMessage(data);
@@ -151,13 +135,8 @@
 
       // display messages
       socket.on("message", function (data) {
-        if (data.randWis == true){
-          //Ignore
-        }
-        else{
         displayMessage(data);
         saveChatLog(data.sender + ": " + data.msg);
-      }
       });
 
       function displayMessage(data) {
