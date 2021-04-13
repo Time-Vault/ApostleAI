@@ -82,6 +82,11 @@ Bot.prototype.pickReply = function (input, responses) {
     console.log(logger.getTime() + logger.error("Sentiment: " + sentiment));
   }
 
+  // Account for group members training the bot in ways incompatible
+  // with my implentation.
+  if (input.intents[0].name == "wikiQuery")
+      input.intents[0].name = "askingAdvice";
+
   //Formualtes response based on intent and sentiment
   for (let intent in responses) {
     if (intent == input.intents[0].name) {
@@ -134,7 +139,7 @@ Bot.prototype.pickReply = function (input, responses) {
 /* If you encounter any issues with the base_url or path, make sure that you are
 using the latest endpoint: https://docs.microsoft.com/azure/cognitive-services/translator/reference/v3-0-translate */
 Bot.prototype.translateText = function(input, language, outbound){
-  console.log("Message "+input);
+  console.log("Message: "+input);
   console.log("To Language "+language);
     let options = {
         method: 'POST',
@@ -160,6 +165,7 @@ Bot.prototype.translateText = function(input, language, outbound){
         // create response object to be sent to the server
         translatedMsg = body[0].translations[0].text;
         inputLang = body[0].detectedLanguage.language;
+        console.log("Bing Returned Message: "+body[0].translations[0].text);
     });
 
     setTimeout(() =>{
