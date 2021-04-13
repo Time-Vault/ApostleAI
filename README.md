@@ -122,7 +122,7 @@ Individually I added the ability to make redemntary Wikipedia searches through t
 
 **NEW: Multilingual Support**
 
-ApostleAI can now have a conversation in multiple languages thanks to the Microsoft Bing Translator API! Simply type in your language of choice and see!.
+ApostleAI can now have a conversation in multiple languages thanks to the Microsoft Bing Translator API! Simply type in your language of choice and see!
 
 ![Translate](https://github.com/Time-Vault/ApostleAI/blob/main/public/assets/Screenshot%20(5).png)
 
