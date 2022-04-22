@@ -84,7 +84,7 @@ Bot.prototype.pickReply = function (input, responses) {
 
   // Account for group members training the bot in ways incompatible
   // with my implentation.
-  if (input.intents[0].name == "wikiQuery")
+  if (input.intents[0].name == "wikiQuery" || input.intents[0].name == "latestTweet")
       input.intents[0].name = "askingAdvice";
 
   //Formualtes response based on intent and sentiment
